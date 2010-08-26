@@ -38,8 +38,10 @@
 
 (defn home [request]
   (html
-   [:p {:style "text-align:center"}
-    [:img {:src "http://ui10.gamespot.com/2409/paste_2.jpg"}]]))
+   [:p {:style "text-align:center;margin-top:200px"}
+    [:img
+     {:src
+      "http://blog.swivel.com/photos/uncategorized/2008/09/16/ralph2.gif"}]]))
 
 (defn not-found [request]
   (html
