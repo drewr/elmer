@@ -41,7 +41,7 @@
    [:p {:style "text-align:center;margin-top:200px"}
     [:img
      {:src
-      "http://blog.swivel.com/photos/uncategorized/2008/09/16/ralph2.gif"}]]))
+      "http://wiw.org/~jess/wp-content/uploads/2007/07/ralph2.gif"}]]))
 
 (defn not-found [request]
   (html
