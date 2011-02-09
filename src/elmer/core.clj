@@ -25,12 +25,17 @@
        :body (format "%s not found" filename)})))
 
 (defn post-paste [{:keys [uri body] :as request}]
-  (let [file (format "%s.txt" (unique))
+  (let [file (or (-> request :headers (get "x-save-as"))
+                 (format "%s.txt" (unique)))
         path (format "%s/%s" (publish-root) file)
         paste-url (format "%s/%s" (config :public-url) file)
         body* (slurp* body)]
-    (spit path body*)
-    (format "%s %s" (count body*) paste-url)))
+    (if (.exists (java.io.File. path))
+      {:status 409
+       :body (format "%s already exists" file)}
+      (do
+        (spit path body*)
+        (format "%s %s" (count body*) paste-url)))))
 
 (defn info-paste [request]
   (format "curl -s -XPOST -H \"Content-type: text/plain\" --data-binary @- %s"
