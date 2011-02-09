@@ -15,7 +15,7 @@
   (ANY "*" []
        {:status 404, :body "<h1>Page not found</h1>"}))
 
-(def app (-> #'go (wrap-reload '(elmer.run)) (wrap-stacktrace)))
+(def app (-> #'go (wrap-reload '(elmer.core)) (wrap-stacktrace)))
 
 (defonce *app* (run-jetty #'app {:port 8085 :join? false}))
 
