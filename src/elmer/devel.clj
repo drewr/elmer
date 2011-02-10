@@ -3,13 +3,15 @@
         [ring.adapter.jetty :only [run-jetty]]
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.stacktrace :only [wrap-stacktrace]]
-        [elmer.core :only [serve-paste post-paste info-paste]]))
+        [elmer.core :only [home serve-paste post-paste info-paste]]))
 
 (defroutes go
   (GET "/:paste.:ext" [paste ext]
        (serve-paste (format "%s.%s" paste ext)))
   (GET "/sh" request
         (info-paste request))
+  (GET "/" request
+        (home request))
   (POST "/" request
         (post-paste request))
   (ANY "*" []
