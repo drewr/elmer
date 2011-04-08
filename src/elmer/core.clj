@@ -65,8 +65,7 @@
   (html
    [:p {:style "text-align:center;margin-top:200px"}
     [:img
-     {:src
-      "http://wiw.org/~jess/wp-content/uploads/2007/07/ralph2.gif"}]]))
+     {:src "/img/ralph2.gif"}]]))
 
 (defn not-found [request]
   (html

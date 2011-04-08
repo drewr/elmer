@@ -10,5 +10,7 @@
                  [org.markdownj/markdownj "0.3.0-1.0.2b4"]]
   :dev-dependencies [[swank-clojure "1.2.1"]
                      [lein-release "1.1.1"]
-                     [uk.org.alienscience/leiningen-war "0.0.3"]]
-  :namespaces [elmer.servlet])
+                     [uk.org.alienscience/leiningen-war "0.0.13"]]
+  :namespaces [elmer.servlet]
+  :war {:name "elmer.war"
+        :web-content "public"})
