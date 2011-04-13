@@ -11,6 +11,6 @@
   :dev-dependencies [[swank-clojure "1.2.1"]
                      [lein-release "1.1.1"]
                      [uk.org.alienscience/leiningen-war "0.0.13"]]
-  :namespaces [elmer.servlet]
+  :aot [elmer.servlet]
   :war {:name "elmer.war"
         :web-content "public"})
