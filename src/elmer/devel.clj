@@ -1,23 +1,18 @@
 (ns elmer.devel
-  (:use [compojure.core :only [defroutes GET POST ANY]]
+  (:require [elmer.core :as elmer])
+  (:use [compojure.core :only [defroutes GET POST PUT ANY]]
         [ring.adapter.jetty :only [run-jetty]]
+        [ring.middleware.file :only [wrap-file]]
+        [ring.middleware.file-info :only [wrap-file-info]]
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.stacktrace :only [wrap-stacktrace]]
-        [elmer.core :only [home serve-paste post-paste info-paste]]))
+        [ring.middleware.static :only [wrap-static]]))
 
-(defroutes go
-  (GET "/:paste.:ext" [paste ext]
-       (serve-paste (format "%s.%s" paste ext)))
-  (GET "/sh" request
-        (info-paste request))
-  (GET "/" request
-        (home request))
-  (POST "/" request
-        (post-paste request))
-  (ANY "*" []
-       {:status 404, :body "<h1>Page not found</h1>"}))
-
-(def app (-> #'go (wrap-reload '(elmer.core)) (wrap-stacktrace)))
+(def app (-> #'elmer/app
+             (wrap-file "public")
+             (wrap-file-info)
+             (wrap-reload '(elmer.core))
+             (wrap-stacktrace)))
 
 (defonce *app* (run-jetty #'app {:port 8085 :join? false}))
 

@@ -1,5 +1,6 @@
 (ns elmer.core
   (:use [clojure.contrib.duck-streams :only [slurp*]]
+        [compojure.core :only [defroutes GET POST ANY]]
         [elmer.config]
         [hiccup.core :only [html]]))
 
@@ -40,7 +41,7 @@
 
 (defn post-paste [{:keys [uri body] :as request}]
   (let [file (or (-> request :headers (get "x-save-as"))
-               (format "%s.txt" (unique)))
+                 (format "%s.txt" (unique)))
         key (or (-> request :headers (get "x-key")) (make-key))
         key-not-valid (not (key-valid? file key))
         can-edit (not key-not-valid)
@@ -70,3 +71,15 @@
 (defn not-found [request]
   (html
    [:h1 (format "Page not found: %s" (:uri request))]))
+
+(defroutes app
+  (GET "/:paste.:ext" [paste ext]
+       (serve-paste (format "%s.%s" paste ext)))
+  (GET "/sh" request
+       (info-paste request))
+  (GET "/" request
+       (home request))
+  (POST "/" request
+        (post-paste request))
+  (ANY "*" request
+       {:status 404, :body (not-found request)}))
