@@ -39,9 +39,15 @@
       {:status 404
        :body (format "%s not found" filename)})))
 
+(defn save-as [request]
+  (let [uri (clojure.string/replace-first (:uri request) "/" "")
+        uri (if (seq uri) uri nil)]
+    (or uri
+        (-> request :headers (get "x-save-as"))
+        (format "%s.txt" (unique))))  )
+
 (defn post-paste [{:keys [uri body] :as request}]
-  (let [file (or (-> request :headers (get "x-save-as"))
-                 (format "%s.txt" (unique)))
+  (let [file (save-as request)
         key (or (-> request :headers (get "x-key")) (make-key))
         key-not-valid (not (key-valid? file key))
         can-edit (not key-not-valid)
@@ -79,7 +85,11 @@
        (info-paste request))
   (GET "/" request
        (home request))
+
+  (POST "/:paste.:ext" request
+        (post-paste request))
   (POST "/" request
         (post-paste request))
+
   (ANY "*" request
        {:status 404, :body (not-found request)}))
