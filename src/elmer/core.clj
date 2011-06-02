@@ -1,7 +1,9 @@
 (ns elmer.core
-  (:use [clojure.contrib.duck-streams :only [slurp*]]
+  (:use [clojure.string :only [replace-first]]
+        [clojure.contrib.duck-streams :only [slurp*]]
         [compojure.core :only [defroutes GET POST ANY]]
         [elmer.config]
+        [elmer.template :only [render-template]]
         [hiccup.core :only [html]]))
 
 (defn get-time []
@@ -40,7 +42,7 @@
        :body (format "%s not found" filename)})))
 
 (defn save-as [request]
-  (let [uri (clojure.string/replace-first (:uri request) "/" "")
+  (let [uri (replace-first (:uri request) "/" "")
         uri (if (seq uri) uri nil)]
     (or uri
         (-> request :headers (get "x-save-as"))
@@ -65,8 +67,7 @@
         success))))
 
 (defn info-paste [request]
-  (format "curl -s -XPOST -H \"Content-type: text/plain\" --data-binary @- %s"
-          (config :public-url)))
+  (render-template "paste.sh" {:url (config :public-url)}))
 
 (defn home [request]
   (html
