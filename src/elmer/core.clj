@@ -1,5 +1,5 @@
 (ns elmer.core
-  (:use [clojure.string :only [replace-first]]
+  (:use [clojure.string :only [replace-first split join]]
         [clojure.contrib.duck-streams :only [slurp*]]
         [compojure.core :only [defroutes GET POST ANY]]
         [elmer.config]
@@ -82,6 +82,11 @@
 (defroutes app
   (GET "/:paste.:ext" [paste ext]
        (serve-paste (format "%s.%s" paste ext)))
+  (GET "/classpath" request
+       (apply str
+              (join "\n"
+                    (split
+                     (System/getProperty "java.class.path") #":"))))
   (GET "/sh" request
        (info-paste request))
   (GET "/" request
