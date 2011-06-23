@@ -12,10 +12,7 @@
 
 (defn load* [path ctx]
   (make-template
-   (-> (clojure.lang.RT/baseLoader)
-       (.getResourceAsStream path)
-       slurp*)
-   ctx))
+   (slurp* (get-resource-file path)) ctx))
 
 (defn render [path ctx]
   (.render (load* path ctx)))
