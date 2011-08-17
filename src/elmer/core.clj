@@ -42,12 +42,13 @@
         paste-url (format "%s/%s" (config :public-url) paste)
         body* (slurp* body)
         success (format "%s %s %s\n" (count body*) key paste-url)]
-    (if (store/authorized? store key paste)
+    (if (not (store/authorized? store key paste))
       {:status 401
        :body (format "unauthorized: %s\n" paste)}
-      (do
-        (store/put store key paste body*)
-        success))))
+      (if (store/put store key paste body*)
+        success
+        {:status 500
+         :body (format "FAIL %s\n" paste)}))))
 
 (defn info-paste [request]
   (render-template "paste.sh" {:url (config :public-url)}))

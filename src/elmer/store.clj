@@ -2,9 +2,9 @@
   (:refer-clojure :exclude [get]))
 
 (defprotocol PasteStore
-  (get [store pname]
+  (get [store name]
     "Get paste.")
-  (put [store key pname bytes]
+  (put [store key name bytes]
     "Persist bytes to store by name, secured with key.")
-  (authorized? [store key pname]
-    "Does this key match stored key for pname?"))
+  (authorized? [store key name]
+    "Does this key match stored key for name?"))

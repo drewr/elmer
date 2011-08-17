@@ -1,5 +1,6 @@
 (ns elmer.devel
-  (:require [elmer.core :as elmer])
+  (:require [elmer.core :as elmer]
+            [elmer.store fs])
   (:use [compojure.core :only [defroutes GET POST PUT ANY]]
         [ring.adapter.jetty :only [run-jetty]]
         [ring.middleware.file :only [wrap-file]]
@@ -18,6 +19,3 @@
              (wrap-stacktrace)))
 
 (defonce *app* (run-jetty #'app {:port 8085 :join? false}))
-
-
-
