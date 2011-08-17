@@ -6,13 +6,18 @@
         [ring.middleware.file-info :only [wrap-file-info]]
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.stacktrace :only [wrap-stacktrace]]
-        [ring.middleware.static :only [wrap-static]]))
+        [ring.middleware.static :only [wrap-static]]
+        [elmer.config :only [config]]
+        [elmer.middleware :only [wrap-paste-store]]))
 
 (def app (-> #'elmer/app
+             (wrap-paste-store :store (config :store))
              (wrap-file "public")
              (wrap-file-info)
              (wrap-reload '(elmer.core))
              (wrap-stacktrace)))
 
 (defonce *app* (run-jetty #'app {:port 8085 :join? false}))
+
+
 

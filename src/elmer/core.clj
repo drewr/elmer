@@ -1,4 +1,5 @@
 (ns elmer.core
+  (:require [elmer.store :as store])
   (:use [clojure.string :only [replace-first]]
         [clojure.contrib.duck-streams :only [slurp*]]
         [compojure.core :only [defroutes GET POST ANY]]
@@ -18,52 +19,34 @@
     (.nextBytes r bs)
     (.encode (sun.misc.BASE64Encoder.) bs)))
 
-(defn publish-root []
-  (-> (config :publish-root)
-      java.io.File.
-      .getAbsolutePath))
-
-(defn key-valid? [id key]
-  (try
-    (= key (slurp* (format "%s/%s.key" (config :key-root) id)))
-    (catch java.io.FileNotFoundException _ false)))
-
-(defn store-key [id key]
-  (spit (format "%s/%s.key" (config :key-root) id) key))
-
-(defn serve-paste [filename]
-  (let [path (format "%s/%s" (publish-root)
-                     filename)]
-    (if (.exists (java.io.File. path))
+(defn serve-paste [store paste]
+  (let [bytes (store/get store paste)]
+    (if bytes
       {:status 200
        :headers {"Content-Type" "text/plain"}
-       :body (slurp path)}
+       :body bytes}
       {:status 404
-       :body (format "%s not found" filename)})))
+       :body (format "%s not found" paste)})))
 
 (defn save-as [request]
   (let [uri (replace-first (:uri request) "/" "")
         uri (if (seq uri) uri nil)]
     (or uri
         (-> request :headers (get "x-save-as"))
-        (format "%s.txt" (unique))))  )
+        (format "%s.txt" (unique)))) )
 
-(defn post-paste [{:keys [uri body] :as request}]
-  (let [file (save-as request)
-        key (or (-> request :headers (get "x-key")) (make-key))
-        key-not-valid (not (key-valid? file key))
-        can-edit (not key-not-valid)
-        path (format "%s/%s" (publish-root) file)
-        paste-url (format "%s/%s" (config :public-url) file)
+(defn post-paste [{:keys [uri body store] :as req}]
+  (let [paste (save-as req)
+        key (or (-> req :headers (get "x-key"))
+                (make-key))
+        paste-url (format "%s/%s" (config :public-url) paste)
         body* (slurp* body)
         success (format "%s %s %s\n" (count body*) key paste-url)]
-    (if (and (.exists (java.io.File. path)) key-not-valid)
+    (if (store/authorized? store key paste)
       {:status 401
-       :body (format "unauthorized: %s\n" file)}
+       :body (format "unauthorized: %s\n" paste)}
       (do
-        (when key-not-valid
-          (store-key file key))
-        (spit path body*)
+        (store/put store key paste body*)
         success))))
 
 (defn info-paste [request]
@@ -80,8 +63,10 @@
    [:h1 (format "Page not found: %s" (:uri request))]))
 
 (defroutes app
-  (GET "/:paste.:ext" [paste ext]
-       (serve-paste (format "%s.%s" paste ext)))
+  (GET "/:paste.:ext" {{paste "paste"
+                        ext "ext"} :params
+                        store :store}
+       (serve-paste store (format "%s.%s" paste ext)))
   (GET "/sh" request
        (info-paste request))
   (GET "/" request
