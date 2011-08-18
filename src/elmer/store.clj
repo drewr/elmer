@@ -4,7 +4,7 @@
 (defprotocol PasteStore
   (get [store name]
     "Get paste.")
-  (put [store key name bytes]
+  (put [store name key bytes]
     "Persist bytes to store by name, secured with key.")
-  (authorized? [store key name]
+  (authorized? [store name key]
     "Does this key match stored key for name?"))

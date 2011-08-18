@@ -41,12 +41,15 @@
                 (make-key))
         paste-url (format "%s/%s" (config :public-url) paste)
         body* (slurp* body)
-        success (format "%s %s %s\n" (count body*) key paste-url)]
-    (if (not (store/authorized? store key paste))
-      {:status 401
-       :body (format "unauthorized: %s\n" paste)}
-      (if (store/put store key paste body*)
+        success (format "%s %s %s\n" (count body*) key paste-url)
+        _ (println "** authorized" (store/authorized? store key paste))]
+    (try
+      (if (store/put store paste key body*)
         success
+        {:status 401
+         :body (format "unauthorized: %s\n" paste)})
+      (catch Exception e
+        (prn e)
         {:status 500
          :body (format "FAIL %s\n" paste)}))))
 
