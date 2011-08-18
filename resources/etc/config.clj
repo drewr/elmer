@@ -1,4 +1,4 @@
-{:store {:type 'elmer.store.fs/fs-store
+{:store {:factory :elmer.store.fs/fs-store
          :publish-root "tmp"
          :key-root "tmp"}
  :public-url "http://localhost:7999"
