@@ -1,6 +1,11 @@
 (ns elmer.util
   (:use [clojure.java.io :only [file]]))
 
+(defn test-dir []
+  (str "tmp/pastes-"
+       (.substring
+        (str (java.util.UUID/randomUUID)) 0 8)))
+
 (defn make-dir [dir]
   (.mkdirs (file dir)))
 

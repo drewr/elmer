@@ -1,12 +1,8 @@
 (ns elmer.test.store.fs
   (:require [elmer.store :as store])
   (:use [elmer.store.fs] :reload)
-  (:use [clojure.test]))
-
-(defn test-dir []
-  (str "tmp/pastes-"
-       (.substring
-        (str (java.util.UUID/randomUUID)) 0 8)))
+  (:use [clojure.test]
+        [elmer.util :only [test-dir]]))
 
 (deftest t-paste
   (testing "should put a paste"
