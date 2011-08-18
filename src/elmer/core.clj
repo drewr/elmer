@@ -41,8 +41,9 @@
                 (make-key))
         paste-url (format "%s/%s" (config :public-url) paste)
         body* (slurp* body)
-        success (format "%s %s %s\n" (count body*) key paste-url)
-        _ (println "** authorized" (store/authorized? store key paste))]
+        success {:status 200
+                 :headers {"x-key" key}
+                 :body (format "%s %s %s\n" (count body*) key paste-url)}]
     (try
       (if (store/put store paste key body*)
         success
