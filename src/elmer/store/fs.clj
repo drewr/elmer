@@ -1,7 +1,16 @@
 (ns elmer.store.fs
   (:use [clojure.contrib.duck-streams :only [slurp*]]
         [clojure.java.io :only [file]]
+        [elmer.util :only [make-dir delete-dir]]
         [elmer.store :only [PasteStore]]))
+
+(defmacro with-tmp-fs-store [[store dir] & body]
+  `(let [dir# ~dir
+         ~store (fs-store {:publish-root dir#
+                           :key-root dir#})]
+     (make-dir dir#)
+     ~@body
+     (delete-dir dir#)))
 
 (defn get-key [key-root name]
   (-> (format "%s/%s.key" key-root name) file slurp* .trim))
