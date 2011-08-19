@@ -3,6 +3,8 @@
   :repositories {"scala-tools" "http://scala-tools.org/repo-releases/"}
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
+                 [org.clojure/tools.logging "0.2.1-SNAPSHOT"]
+                 [log4j/log4j "1.2.16"]
                  [enlive "1.0.0-SNAPSHOT"]
                  [compojure "0.4.1"]
                  [hiccup "0.2.6"]

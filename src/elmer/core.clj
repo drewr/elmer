@@ -1,5 +1,6 @@
 (ns elmer.core
   (:require [elmer.store :as store])
+  (:require [clojure.tools.logging :as log])
   (:use [clojure.string :only [replace-first]]
         [clojure.contrib.duck-streams :only [slurp*]]
         [compojure.core :only [defroutes GET POST ANY]]
@@ -46,11 +47,13 @@
                  :body (format "%s %s %s\n" (count body*) key paste-url)}]
     (try
       (if (store/put store paste key body*)
-        success
+        (do
+          (log/info "store" paste (count body*))
+          success)
         {:status 401
          :body (format "unauthorized: %s\n" paste)})
       (catch Exception e
-        (println "ERROR" (type e) (.getMessage e))
+        (log/error (type e) (.getMessage e))
         {:status 500
          :body (format "FAIL %s\n" paste)}))))
 

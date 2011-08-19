@@ -1,4 +1,5 @@
 (ns elmer.store.fs
+  (:require [clojure.tools.logging :as log])
   (:use [clojure.contrib.duck-streams :only [slurp*]]
         [clojure.java.io :only [file]]
         [elmer.util :only [make-dir delete-dir]]
@@ -24,12 +25,12 @@
 (defn store-key [key-root name key]
   (let [keyfile (-> (format "%s/%s.key" key-root name)
                     file .getAbsolutePath)]
-    (println "INFO" "storing key" keyfile)
+    (log/debug "storing key" keyfile)
     (spit keyfile key)))
 
 (defn getf [root _ name]
   (let [path (format "%s/%s" root name)
-        _ (println "INFO loading" (-> path file .getAbsolutePath))]
+        _ (log/debug "loading" (-> path file .getAbsolutePath))]
     (when (.exists (java.io.File. path))
       (slurp path))))
 
@@ -38,13 +39,13 @@
                (key-valid? key-root name key)
                true)
         keyfile (-> (format "%s/%s" key-root name) file .getAbsolutePath)]
-    (println "INFO authorizing" keyfile "->" yes?)
+    (log/debug "authorizing" keyfile "->" yes?)
     yes?))
 
 (defn putf [root key-root name key bytes]
   (when (authorized?f root key-root name key)
     (store-key key-root name key)
-    (println "INFO" "storing paste" (-> root file .getAbsolutePath) name)
+    (log/debug "storing paste" (-> root file .getAbsolutePath) name)
     (spit (format "%s/%s" root name) bytes)
     true))
 
@@ -58,9 +59,9 @@
     (authorized?f root key-root name key)))
 
 (defn fs-store [opts]
-  (println "DEBUG ensuring"
-           "pastes" (:publish-root opts)
-           "keys" (:key-root opts))
+  (log/debug "ensuring"
+             "pastes" (:publish-root opts)
+             "keys" (:key-root opts))
   (make-dir (:publish-root opts))
   (make-dir (:key-root opts))
   (FsStore. (:publish-root opts) (:key-root opts)))
