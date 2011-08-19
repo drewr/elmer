@@ -22,21 +22,29 @@
   (= key (get-key key-root name)))
 
 (defn store-key [key-root name key]
-  (spit (format "%s/%s.key" key-root name) key))
+  (let [keyfile (-> (format "%s/%s.key" key-root name)
+                    file .getAbsolutePath)]
+    (println "INFO" "storing key" keyfile)
+    (spit keyfile key)))
 
 (defn getf [root _ name]
-  (let [path (format "%s/%s" root name)]
+  (let [path (format "%s/%s" root name)
+        _ (println "INFO loading" (-> path file .getAbsolutePath))]
     (when (.exists (java.io.File. path))
       (slurp path))))
 
 (defn authorized?f [root key-root name key]
-  (if (key-exists? key-root name)
-    (key-valid? key-root name key)
-    true))
+  (let [yes? (if (key-exists? key-root name)
+               (key-valid? key-root name key)
+               true)
+        keyfile (-> (format "%s/%s" key-root name) file .getAbsolutePath)]
+    (println "INFO authorizing" keyfile "->" yes?)
+    yes?))
 
 (defn putf [root key-root name key bytes]
   (when (authorized?f root key-root name key)
     (store-key key-root name key)
+    (println "INFO" "storing paste" (-> root file .getAbsolutePath) name)
     (spit (format "%s/%s" root name) bytes)
     true))
 

@@ -7,6 +7,11 @@
   (:gen-class
    :extends javax.servlet.http.HttpServlet))
 
+(println "DEBUG loading configs"
+         (clojure.string/join
+          " "
+          (elmer.config/get-resources "etc/config.clj")))
+
 (def handler (-> app
                  wrap-context-path
                  (wrap-paste-store :store (config :store))))

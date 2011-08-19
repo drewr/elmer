@@ -50,7 +50,7 @@
         {:status 401
          :body (format "unauthorized: %s\n" paste)})
       (catch Exception e
-        (prn e)
+        (println "ERROR" (type e) (.getMessage e))
         {:status 500
          :body (format "FAIL %s\n" paste)}))))
 
