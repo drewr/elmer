@@ -25,12 +25,12 @@
 (defn store-key [key-root name key]
   (let [keyfile (-> (format "%s/%s.key" key-root name)
                     file .getAbsolutePath)]
-    (log/debug "storing key" keyfile)
+    (log/debug "store" keyfile)
     (spit keyfile key)))
 
 (defn getf [root _ name]
   (let [path (format "%s/%s" root name)
-        _ (log/debug "loading" (-> path file .getAbsolutePath))]
+        _ (log/debug "load" (-> path file .getAbsolutePath))]
     (when (.exists (java.io.File. path))
       (slurp path))))
 
@@ -39,13 +39,13 @@
                (key-valid? key-root name key)
                true)
         keyfile (-> (format "%s/%s" key-root name) file .getAbsolutePath)]
-    (log/debug "authorizing" keyfile "->" yes?)
+    (log/debug "auth" keyfile "->" (if yes? "YES" "NO"))
     yes?))
 
 (defn putf [root key-root name key bytes]
   (when (authorized?f root key-root name key)
     (store-key key-root name key)
-    (log/debug "storing paste" (-> root file .getAbsolutePath) name)
+    (log/debug "store" (-> root file .getAbsolutePath) name)
     (spit (format "%s/%s" root name) bytes)
     true))
 
@@ -59,8 +59,7 @@
     (authorized?f root key-root name key)))
 
 (defn fs-store [opts]
-  (log/debug "ensuring"
-             "pastes" (:publish-root opts)
+  (log/debug "pastes" (:publish-root opts)
              "keys" (:key-root opts))
   (make-dir (:publish-root opts))
   (make-dir (:key-root opts))
