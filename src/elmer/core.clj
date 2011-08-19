@@ -42,7 +42,7 @@
         paste-url (format "%s/%s" (config :public-url) paste)
         body* (slurp* body)
         success {:status 200
-                 :headers {"x-key" key}
+                 :headers {"X-Key" key}
                  :body (format "%s %s %s\n" (count body*) key paste-url)}]
     (try
       (if (store/put store paste key body*)
