@@ -58,4 +58,9 @@
     (authorized?f root key-root name key)))
 
 (defn fs-store [opts]
+  (println "DEBUG ensuring"
+           "pastes" (:publish-root opts)
+           "keys" (:key-root opts))
+  (make-dir (:publish-root opts))
+  (make-dir (:key-root opts))
   (FsStore. (:publish-root opts) (:key-root opts)))
