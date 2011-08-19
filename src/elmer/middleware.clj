@@ -1,4 +1,5 @@
-(ns elmer.middleware)
+(ns elmer.middleware
+  (:require [elmer.store fs]))
 
 (defn wrap-paste-store [handler & {:keys [store]}]
   (let [store ((-> (:factory store) .sym find-var) store)]
