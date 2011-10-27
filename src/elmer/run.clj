@@ -1,6 +1,5 @@
 (ns elmer.run
-  (:use [clojure.contrib.duck-streams :only [slurp*]]
-        [compojure.core]
+  (:use [compojure.core]
         [ring.adapter.jetty :only [run-jetty]]
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.stacktrace :only [wrap-stacktrace]]
@@ -25,7 +24,7 @@
   (let [file (format "%s.txt" (get-time))
         path (format "%s/%s" (config :publish-root) file)
         paste-url (format "%s/%s" (config :public-url) file)]
-    (spit path (slurp* body))
+    (spit path (slurp body))
     paste-url))
 
 (defroutes go

@@ -2,7 +2,6 @@
   (:require [elmer.store :as store])
   (:require [clojure.tools.logging :as log])
   (:use [clojure.string :only [replace-first]]
-        [clojure.contrib.duck-streams :only [slurp*]]
         [compojure.core :only [defroutes GET POST ANY]]
         [elmer.config]
         [elmer.template :only [render-template]]
@@ -41,7 +40,7 @@
         key (or (-> req :headers (get "x-key"))
                 (make-key))
         paste-url (format "%s/%s" (config :public-url) paste)
-        body* (slurp* body)
+        body* (slurp body)
         success {:status 200
                  :headers {"X-Key" key}
                  :body (format "%s %s %s\n" (count body*) key paste-url)}]

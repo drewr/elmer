@@ -1,7 +1,6 @@
 (ns elmer.store.fs
   (:require [clojure.tools.logging :as log])
-  (:use [clojure.contrib.duck-streams :only [slurp*]]
-        [clojure.java.io :only [file]]
+  (:use [clojure.java.io :only [file]]
         [elmer.util :only [make-dir delete-dir]]
         [elmer.store :only [PasteStore]]))
 
@@ -14,7 +13,7 @@
      (delete-dir dir#)))
 
 (defn get-key [key-root name]
-  (-> (format "%s/%s.key" key-root name) file slurp* .trim))
+  (-> (format "%s/%s.key" key-root name) file slurp .trim))
 
 (defn key-exists? [key-root name]
   (-> (format "%s/%s.key" key-root name) file .isFile))

@@ -1,6 +1,5 @@
 (ns elmer.template
-  (:use [clojure.contrib.duck-streams :only [slurp*]]
-        [elmer.config]
+  (:use [elmer.config]
         [elmer.io :only [join-path]])
   (:import (org.stringtemplate.v4 ST)))
 
@@ -12,7 +11,7 @@
 
 (defn load* [path ctx]
   (make-template
-   (slurp* (get-resource-file path)) ctx))
+   (slurp (get-resource-file path)) ctx))
 
 (defn render [path ctx]
   (.render (load* path ctx)))
