@@ -4,13 +4,14 @@
         [elmer.util :only [make-dir delete-dir]]
         [elmer.store :only [PasteStore]]))
 
-(defmacro with-tmp-fs-store [[store dir] & body]
+(defmacro with-tmp-fs-store [[store dir keep] & body]
   `(let [dir# ~dir
          ~store (fs-store {:publish-root dir#
                            :key-root dir#})]
      (make-dir dir#)
      ~@body
-     (delete-dir dir#)))
+     (when-not keep
+       (delete-dir dir#))))
 
 (defn get-key [key-root name]
   (-> (format "%s/%s.key" key-root name) file slurp .trim))
