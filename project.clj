@@ -1,13 +1,12 @@
 (defproject elmer "1.0.0-SNAPSHOT"
   :description "Awesome!!!11"
   :repositories {"scala-tools" "http://scala-tools.org/repo-releases/"}
-  :dependencies [[org.clojure/clojure "1.2.0"]
-                 [org.clojure/clojure-contrib "1.2.0"]
-                 [org.clojure/tools.logging "0.2.1-SNAPSHOT"]
+  :dependencies [[org.clojure/clojure "1.3.0"]
+                 [org.clojure/tools.logging "0.2.3"]
                  [log4j/log4j "1.2.16"]
                  [enlive "1.0.0-SNAPSHOT"]
-                 [compojure "0.4.1"]
-                 [hiccup "0.2.6"]
+                 [compojure "0.6.4"]
+                 [hiccup "0.3.7"]
                  [ring/ring "0.3.5"]
                  [org.markdownj/markdownj "0.3.0-1.0.2b4"]
                  [org.antlr/stringtemplate "4.0.2"]]
