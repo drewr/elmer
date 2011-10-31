@@ -39,16 +39,14 @@
   (let [paste (save-as req)
         key (or (-> req :headers (get "X-Key"))
                 (make-key))
-        paste-url (format "%s/%s" (config :public-url) paste)
-        body* (slurp body)
-        success {:status 200
-                 :headers {"X-Key" key}
-                 :body (format "%s %s %s\n" (count body*) key paste-url)}]
+        paste-url (format "%s/%s" (config :public-url) paste)]
     (try
-      (if (store/put store paste key body*)
+      (if-let [size (store/put store paste key body)]
         (do
-          (log/info "store" paste (count body*))
-          success)
+          (log/info "store" paste size)
+          {:status 200
+           :headers {"X-Key" key}
+           :body (format "%s %s %s\n" size key paste-url)})
         {:status 401
          :body (format "unauthorized: %s\n" paste)})
       (catch Exception e

@@ -43,12 +43,12 @@
     yes?))
 
 (defn putf [root key-root name key is]
-  (when (authorized?f root key-root name key)
-    (store-key key-root name key)
-    (log/debug "store" (-> root file .getAbsolutePath) name)
-    (clojure.java.io/copy is (file (format "%s/%s" root name))
-                          :buffer-size 4096)
-    true))
+  (let [f (file (format "%s/%s" root name))]
+    (when (authorized?f root key-root name key)
+      (store-key key-root name key)
+      (log/debug "store" (-> root file .getAbsolutePath) name)
+      (clojure.java.io/copy is f :buffer-size 4096)
+      (.length f))))
 
 (deftype FsStore [root key-root]
   PasteStore
