@@ -42,19 +42,20 @@
     (log/debug "auth" keyfile "->" (if yes? "YES" "NO"))
     yes?))
 
-(defn putf [root key-root name key bytes]
+(defn putf [root key-root name key is]
   (when (authorized?f root key-root name key)
     (store-key key-root name key)
     (log/debug "store" (-> root file .getAbsolutePath) name)
-    (spit (format "%s/%s" root name) bytes)
+    (clojure.java.io/copy is (file (format "%s/%s" root name))
+                          :buffer-size 4096)
     true))
 
 (deftype FsStore [root key-root]
   PasteStore
   (get [_ name]
     (getf root key-root name))
-  (put [_ name key bytes]
-    (putf root key-root name key bytes))
+  (put [_ name key is]
+    (putf root key-root name key is))
   (authorized? [_ name key]
     (authorized?f root key-root name key)))
 
