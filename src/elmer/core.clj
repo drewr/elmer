@@ -70,8 +70,8 @@
    [:h1 (format "Page not found: %s" (:uri request))]))
 
 (defroutes app
-  (GET "/:paste.:ext" {{paste "paste"
-                        ext "ext"} :params
+  (GET "/:paste.:ext" {{paste :paste
+                        ext :ext} :params
                         store :store}
        (serve-paste store (format "%s.%s" paste ext)))
   (GET "/sh" request
