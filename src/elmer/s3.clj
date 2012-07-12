@@ -1,7 +1,8 @@
 (ns elmer.s3
+  (:refer-clojure :exclude [get])
   (:import (org.jets3t.service.security AWSCredentials)
            (org.jets3t.service.impl.rest.httpclient RestS3Service)
-           (org.jets3t.service.model S3Bucket)))
+           (org.jets3t.service.model S3Bucket S3Object)))
 
 (def regions {:us S3Bucket/LOCATION_US
               :us-standard S3Bucket/LOCATION_US_STANDARD
@@ -20,3 +21,12 @@
       (if region
         (-> svc bucket region)
         (-> svc bucket)))))
+
+(defn make-object [bucket key is len cont]
+  (doto (S3Object. bucket key)
+    (.setDataInputStream is)
+    (.setContentLength len)
+    (.setContentType cont)))
+
+(defn put [svc bucket object]
+  (.putObject svc bucket object))

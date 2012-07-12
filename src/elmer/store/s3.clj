@@ -13,16 +13,23 @@
 
 
 
-(deftype S3Store [root key-root]
+(deftype S3Store [loc pastes keys]
   PasteStore
   (get [_ name]
-    (get* root key-root name))
-  (put [_ name key bytes]
-    (put* root key-root name key bytes))
+    (get*))
+  (put [_ name key is]
+    (put*))
   (authorized? [_ name key]
-    (authorized?* root key-root name key)))
+    (authorized?*)))
 
-(defn s3-store [opts]
-  (log/debug "pastes" (:publish-root opts)
-             "keys" (:key-root opts))
-  (S3Store. (:publish-root opts) (:key-root opts)))
+(defrecord S3Location [acc key bucket])
+
+(defn s3-store [{:keys [accesskey secret
+                        bucket key-pastes key-keys]
+                 :as opts}]
+  (log/debug (format "S3Store (%s):" accesskey)
+             "bucket" bucket
+             "pastes" key-pastes
+             "keys" key-keys)
+  (S3Store. accesskey secret bucket key-pastes key-keys))
+

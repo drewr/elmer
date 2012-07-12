@@ -12,6 +12,13 @@
         [elmer.middleware :only [wrap-paste-store]]))
 
 (def app (-> #'elmer/app
+             ((fn [app]
+                (fn [req]
+                  (prn (java.util.Date.))
+                  (prn req)
+                  (prn (slurp (clojure.java.io/reader (:body req))))
+                  app)))
+
              (wrap-paste-store :store (config :store))
              (wrap-file "public")
              (wrap-file-info)
