@@ -30,6 +30,8 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ;; MA 02111-1307, USA.
 
+(require 'cl)
+
 (defgroup elmer nil
   "Interface to the elmer paste service."
   :group 'data)
@@ -40,13 +42,22 @@ to elmer."
   :type 'string
   :group 'elmer)
 
+(defvar elmer-file-history '())
+
+(defvar elmer-key-history '())
+
 (defun elmer-concat-cmd (str1 str2)
   (if (string= str2 "")
       str1
     (concat str1 " " str2)))
 
 (defun elmer (name key)
-  (interactive "MName (defaults to random): \nMKey: ")
+  (interactive
+   (list
+    (read-from-minibuffer "Name: " (car elmer-file-history)
+                          nil nil '(elmer-file-history . 1))
+    (read-from-minibuffer "Key: " (car elmer-key-history) nil nil
+                          '(elmer-key-history . 1))))
   (let* ((buf (get-buffer-create "*elmer*"))
          (cmd (elmer-concat-cmd elmer-paste-bin name))
          (cmd (if (not (string= name ""))
@@ -58,9 +69,14 @@ to elmer."
                             (buffer-string))))
                  (if (string-match "\\(\n\\|\\s-\\)+$" str)
                      (replace-match "" t t str)
-                   str)))
-         (url (if (string-match " http" resp)
-                  (kill-new (car (last (split-string resp)))))))
+                   str))))
+    (if (string-match " http" resp)
+        (destructuring-bind (bytes key url)
+            (split-string resp)
+          (kill-new url)
+          (setq elmer-file-history (cons (car (last (split-string url "/")))
+                                         elmer-file-history))
+          (setq elmer-key-history (cons key elmer-key-history))))
     resp))
 
 (provide 'elmer)
