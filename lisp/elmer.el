@@ -30,6 +30,12 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ;; MA 02111-1307, USA.
 
+;; Installation:
+;;
+;;   (add-to-list 'load-path "/path/to/lisp")
+;;   (require 'elmer)
+;;   (global-set-key (kbd "C-c C-e") 'elmer)
+
 (require 'cl)
 
 (defgroup elmer nil
