@@ -42,7 +42,7 @@
   "Interface to the elmer paste service."
   :group 'data)
 
-(defcustom elmer-paste-bin "/usr/local/bin/elmer"
+(defcustom elmer-bin "/usr/local/bin/elmer"
   "Location of script that accepts stdin and knows how to paste
 to elmer."
   :type 'string
@@ -65,7 +65,7 @@ to elmer."
     (read-from-minibuffer "Key: " (car elmer-key-history) nil nil
                           '(elmer-key-history . 1))))
   (let* ((buf (get-buffer-create "*elmer*"))
-         (cmd (elmer-concat-cmd elmer-paste-bin name))
+         (cmd (elmer-concat-cmd elmer-bin name))
          (cmd (if (not (string= name ""))
                   (elmer-concat-cmd cmd key)
                 cmd))
