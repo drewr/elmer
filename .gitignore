@@ -5,3 +5,4 @@ classes
 /jetty/webapps/*
 /tmp/*
 /.lein-failures
+/.lein-deps-sum
