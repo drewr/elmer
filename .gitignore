@@ -6,3 +6,4 @@ classes
 /tmp/*
 /.lein-failures
 /.lein-deps-sum
+/target
