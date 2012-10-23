@@ -10,7 +10,6 @@
                  [ring/ring "0.3.5"]
                  [org.markdownj/markdownj "0.3.0-1.0.2b4"]
                  [org.antlr/stringtemplate "4.0.2"]
-                 [net.java.dev.jets3t/jets3t "0.8.1"]
                  [clj-aws-s3 "0.3.2"]]
   :dev-dependencies [[swank-clojure "1.3.1"]
                      [lein-release "1.1.1"]
