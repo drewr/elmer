@@ -1,4 +1,4 @@
-(defproject elmer "1.0.0-SNAPSHOT"
+(defproject elmer "1.0.0"
   :description "Awesome!!!11"
   :repositories {"scala-tools" "http://scala-tools.org/repo-releases/"}
   :dependencies [[org.clojure/clojure "1.3.0"]
