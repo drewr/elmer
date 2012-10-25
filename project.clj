@@ -15,5 +15,4 @@
                      [lein-release "1.1.1"]
                      [uk.org.alienscience/leiningen-war "0.0.13"]]
   :aot [elmer.servlet]
-  :war {:name "elmer.war"
-        :web-content "public"})
+  :war {:web-content "public"})
