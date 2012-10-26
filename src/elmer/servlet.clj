@@ -1,5 +1,6 @@
 (ns elmer.servlet
-  (:require [clojure.tools.logging :as log])
+  (:require [clojure.tools.logging :as log]
+            [elmer.store fs s3])
   (:use [ring.util.servlet :only [servlet defservice]]
         [elmer.core :only [app]]
         [elmer.context :only [wrap-context-path]]
