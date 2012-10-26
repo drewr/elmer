@@ -4,7 +4,7 @@
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.clojure/tools.logging "0.2.3"]
                  [log4j/log4j "1.2.16"]
-                 [enlive "1.0.0-SNAPSHOT"]
+                 [enlive "1.0.0"]
                  [compojure "0.6.4"]
                  [hiccup "0.3.7"]
                  [ring/ring "0.3.5"]
