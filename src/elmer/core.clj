@@ -80,8 +80,7 @@
   (POST "/:paste.:ext" request
         (post-paste request))
   (POST "/" request
-        (prn "foo!")
-        {:status 200, :body "thanks"})
+        (post-paste request))
 
   (ANY "*" request
        {:status 404, :body (not-found request)}))
