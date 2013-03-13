@@ -5,7 +5,7 @@ JETTY_PATH = /apps/jetty
 LOCAL_JETTY_PATH = ~/src/jetty
 
 build:
-	lein clean && lein deps && lein compile && lein uberwar
+	lein clean && lein deps && lein compile && lein ring uberwar
 
 local-deploy:
 	lein clean && lein deps && lein compile && lein uberwar \
