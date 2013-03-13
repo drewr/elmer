@@ -1,5 +1,6 @@
 (defproject elmer "1.1.0"
   :description "Awesome!!!11"
+  :exclusions #{org.codehaus.jackson/jackson-core-asl}
   :dependencies [
                  [clj-aws-s3 "0.3.2"]
                  [commons-io "2.4"]
@@ -11,6 +12,7 @@
                  [org.clojure/clojure "1.5.0-RC17"]
                  [org.clojure/tools.logging "0.2.3"]
                  [ring/ring "0.3.10"]
+                 [org.codehaus.jackson/jackson-core-asl "1.9.12"]
 ]
   :plugins [[lein-ring "0.8.3"]]
   :ring {:handler elmer.serve/handler})
