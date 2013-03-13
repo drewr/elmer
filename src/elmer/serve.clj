@@ -1,4 +1,4 @@
-(ns elmer.servlet
+(ns elmer.serve
   (:require [clojure.tools.logging :as log]
             [elmer.store fs s3]
             [elmer.core :refer [app]]

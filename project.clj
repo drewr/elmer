@@ -13,4 +13,4 @@
                  [ring/ring "0.3.10"]
 ]
   :plugins [[lein-ring "0.8.3"]]
-  :ring {:handler elmer.servlet/handler})
+  :ring {:handler elmer.serve/handler})
