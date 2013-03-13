@@ -1,5 +1,5 @@
 (ns elmer.test.servlet
-  (:use [elmer.servlet] :reload)
+  (:use [elmer.serve] :reload)
   (:use [clojure.test]
         [elmer.util :only [test-dir]]
         [elmer.core :only [post-paste serve-paste]]
