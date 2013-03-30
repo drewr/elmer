@@ -37,7 +37,7 @@
 
 (defn post-paste [{:keys [uri body store] :as req}]
   (let [paste (save-as req)
-        key (or (-> req :headers (get "X-Key"))
+        key (or (-> req :headers (get "x-key"))
                 (make-key))
         paste-url (format "%s/%s" (config :public-url) paste)]
     (try
