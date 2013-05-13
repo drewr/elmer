@@ -25,4 +25,4 @@
              (wrap-reload '(elmer.core))
              (wrap-stacktrace)))
 
-(defonce *app* (run-jetty #'app {:port 8085 :join? false}))
+(defonce server (run-jetty #'app {:port 8085 :join? false}))
