@@ -17,7 +17,7 @@
                   (prn (java.util.Date.))
                   (prn req)
                   (prn (slurp (clojure.java.io/reader (:body req))))
-                  app)))
+                  (app req))))
 
              (wrap-paste-store :store (config :store))
              (wrap-file "public")
