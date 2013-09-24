@@ -20,7 +20,7 @@
                                          :body (body)})))))
       (testing "repost with key"
         (is (= 200 (:status (post-paste {:uri "/foo.txt"
-                                         :headers {"X-Key" @key}
+                                         :headers {"x-key" @key}
                                          :store store
                                          :body (body)})))))
       (testing "get content"
