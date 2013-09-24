@@ -4,15 +4,16 @@
   :dependencies [
                  [clj-aws-s3 "0.3.2"]
                  [commons-io "2.4"]
-                 [compojure "0.6.4"]
-                 [enlive "1.0.0" :exclusions [org.clojure/clojure]]
-                 [hiccup "0.3.7"]
+                 [compojure "1.1.5"]
+                 [enlive "1.1.1" :exclusions [org.clojure/clojure]]
+                 [hiccup "1.0.4"]
                  [log4j/log4j "1.2.16"]
                  [org.antlr/stringtemplate "4.0.2"]
-                 [org.clojure/clojure "1.5.0-RC17"]
+                 [org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.logging "0.2.3"]
-                 [ring/ring "0.3.10"]
+                 [ring/ring "1.1.8"]
                  [org.codehaus.jackson/jackson-core-asl "1.9.12"]]
+  :profiles {:dev {:dependencies [[ring/ring-devel "1.1.8"]]}}
   :plugins [[lein-ring "0.8.3"]]
   :ring {:handler elmer.serve/handler}
   :test-selectors {:default (complement :integration)

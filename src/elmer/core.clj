@@ -1,11 +1,12 @@
 (ns elmer.core
-  (:require [elmer.store :as store])
+  (:require [elmer.store :as store]
+            [compojure.route :as route]
+            [hiccup.core :as html])
   (:require [clojure.tools.logging :as log])
   (:use [clojure.string :only [replace-first]]
         [compojure.core :only [defroutes GET POST ANY]]
         [elmer.config]
-        [elmer.template :only [render-template]]
-        [hiccup.core :only [html]]))
+        [elmer.template :only [render-template]]))
 
 (defn get-time []
   (-> (java.util.Date.) .getTime))
@@ -65,13 +66,13 @@
   (render-template "paste.sh" {:url (config :public-url)}))
 
 (defn home [request]
-  (html
+  (html/html
    [:p {:style "text-align:center;margin-top:200px"}
     [:img
      {:src "/img/ralph2.gif"}]]))
 
 (defn not-found [request]
-  (html
+  (html/html
    [:h1 (format "Page not found: %s" (:uri request))]))
 
 (defroutes app
