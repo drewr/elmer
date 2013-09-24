@@ -1,6 +1,7 @@
 (ns elmer.util
   (:require [clojure.java.io :as io])
-  (:import (java.io File)))
+  (:import (java.io File)
+           (java.text SimpleDateFormat)))
 
 (defn test-dir []
   (str "tmp/pastes-"
@@ -26,3 +27,11 @@
        ~@body
        (finally
          (.delete ~sym)))))
+
+(defn now []
+  (.format
+   (SimpleDateFormat. "yyyyMMddHHmmss")
+   (java.util.Date.)))
+
+(defn unique []
+  (format "%s%s" (now) (.substring (str (java.util.UUID/randomUUID)) 32 36)))

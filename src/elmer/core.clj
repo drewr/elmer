@@ -1,18 +1,13 @@
 (ns elmer.core
   (:require [elmer.store :as store]
             [compojure.route :as route]
-            [hiccup.core :as html])
+            [hiccup.core :as html]
+            [elmer.util :refer [unique]])
   (:require [clojure.tools.logging :as log])
   (:use [clojure.string :only [replace-first]]
         [compojure.core :only [defroutes GET POST ANY]]
         [elmer.config]
         [elmer.template :only [render-template]]))
-
-(defn get-time []
-  (-> (java.util.Date.) .getTime))
-
-(defn unique []
-  (format "%s%s" (get-time) (.substring (str (java.util.UUID/randomUUID)) 0 8)))
 
 (defn make-key []
   (let [r (java.security.SecureRandom.)
