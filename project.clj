@@ -12,8 +12,7 @@
                  [org.clojure/clojure "1.5.0-RC17"]
                  [org.clojure/tools.logging "0.2.3"]
                  [ring/ring "0.3.10"]
-                 [org.codehaus.jackson/jackson-core-asl "1.9.12"]
-]
+                 [org.codehaus.jackson/jackson-core-asl "1.9.12"]]
   :plugins [[lein-ring "0.8.3"]]
   :ring {:handler elmer.serve/handler}
   :test-selectors {:default (complement :integration)
