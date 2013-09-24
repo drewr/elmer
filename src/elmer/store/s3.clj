@@ -54,7 +54,7 @@
         (store-key loc key-root name key)
         (log/debug "store" (abs-path loc root name))
         (s3/put-object (:creds loc) (:bucket loc)
-                       (format "%s/%s" root name) contents)
+                       (format "%s/%s" root name) tmp)
         (count (slurp tmp))))))
 
 (deftype S3Store [loc root key-root]
