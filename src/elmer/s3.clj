@@ -1,4 +1,5 @@
 (ns elmer.s3
+  "** Currently unused! **"
   (:refer-clojure :exclude [get])
   (:import (org.jets3t.service.security AWSCredentials)
            (org.jets3t.service.impl.rest.httpclient RestS3Service)
