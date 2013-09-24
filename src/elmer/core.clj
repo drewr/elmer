@@ -2,7 +2,11 @@
   (:require [elmer.store :as store]
             [compojure.route :as route]
             [hiccup.core :as html]
-            [elmer.util :refer [unique]])
+            [elmer.util :refer [unique]]
+            [elmer.middleware :refer [wrap-paste-store]]
+            [ring.middleware.resource :refer [wrap-resource]]
+            [ring.middleware.content-type :refer [wrap-content-type]]
+            )
   (:require [clojure.tools.logging :as log])
   (:use [clojure.string :only [replace-first]]
         [compojure.core :only [defroutes GET POST ANY]]
@@ -87,3 +91,9 @@
 
   (ANY "*" request
        {:status 404, :body (not-found request)}))
+
+(def handler (-> app
+                 wrap-paste-store
+                 (wrap-resource "public")
+                 wrap-content-type
+                 #_wrap-context-path))

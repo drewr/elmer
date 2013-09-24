@@ -1,20 +1,7 @@
 (ns elmer.serve
-  (:require [clojure.tools.logging :as log]
-            [ring.middleware.resource :refer [wrap-resource]]
-            [ring.middleware.content-type :refer [wrap-content-type]]
-            [elmer.store fs s3]
-            [elmer.core :refer [app]]
-            [elmer.context :refer [wrap-context-path]]
-            [elmer.middleware :refer [wrap-paste-store]]
-            [elmer.config]))
+  (:require [elmer.core :refer [handler]]
+            [elmer.context :refer [wrap-context-path]]))
 
-(log/debug "config"
-           (clojure.string/join
-            " "
-            (elmer.config/get-resources "etc/config.clj")))
+(def embedded handler)
 
-(def handler (-> app
-                 wrap-paste-store
-                 (wrap-resource "public")
-                 wrap-content-type
-                 wrap-context-path))
+(def servlet (-> handler wrap-context-path))
