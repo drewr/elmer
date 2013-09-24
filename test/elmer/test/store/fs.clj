@@ -11,8 +11,7 @@
       (is (= "bytes" (store/get store "foo.txt")))))
   (testing "should put a paste from an InputStream"
     (with-tmp-fs-store [store (test-dir)]
-      (is (store/put store "foo.txt" "sekrat" (java.io.ByteArrayInputStream.
-                                               (.getBytes "bytes"))))
+      (is (store/put store "foo.txt" "sekrat" "bytes"))
       (is (= "bytes" (store/get store "foo.txt"))))))
 
 (deftest t-update

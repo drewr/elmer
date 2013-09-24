@@ -35,6 +35,13 @@
         (-> request :headers (get "x-save-as"))
         (format "%s.txt" (unique)))) )
 
+(defmacro with-saved-body [sym & body]
+  `(try
+     (let [~sym ]
+       ~@body)
+     (finally
+       (.delete ~sym))))
+
 (defn post-paste [{:keys [uri body store] :as req}]
   (let [paste (save-as req)
         key (or (-> req :headers (get "x-key"))

@@ -1,6 +1,7 @@
 (ns elmer.store.s3
   (:require [clojure.tools.logging :as log]
-            [aws.sdk.s3 :as s3])
+            [aws.sdk.s3 :as s3]
+            [elmer.util :refer [with-tmp-file]])
   (:use [elmer.store :only [PasteStore]])
   (:import (org.apache.commons.io.input CountingInputStream)))
 
@@ -46,22 +47,22 @@
    (:content
     (s3/get-object (:creds loc) (:bucket loc) (format "%s/%s" pre name)))))
 
-(defn put* [loc root key-root name key is]
+(defn put* [loc root key-root name key contents]
   (let [f (format "%s/%s" root name)]
     (when (authorized?* loc root key-root name key)
-      (let [cis (CountingInputStream. is)]
+      (with-tmp-file [tmp contents]
         (store-key loc key-root name key)
         (log/debug "store" (abs-path loc root name))
         (s3/put-object (:creds loc) (:bucket loc)
-                       (format "%s/%s" root name) cis)
-        (.getByteCount cis)))))
+                       (format "%s/%s" root name) contents)
+        (count (slurp tmp))))))
 
 (deftype S3Store [loc root key-root]
   PasteStore
   (get [_ name]
     (get* loc root name))
-  (put [_ name key is]
-    (put* loc root key-root name key is))
+  (put [_ name key value]
+    (put* loc root key-root name key value))
   (authorized? [_ name key]
     (authorized?*)))
 

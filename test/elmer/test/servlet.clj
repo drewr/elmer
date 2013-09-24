@@ -1,4 +1,5 @@
 (ns elmer.test.servlet
+  (:require [clojure.java.io :as io])
   (:use [elmer.serve] :reload)
   (:use [clojure.test]
         [elmer.util :only [test-dir]]
@@ -11,11 +12,11 @@
  :once
  (fn [t]
    (with-tmp-fs-store [_store (test-dir)]
-     (let [body (fn [] (java.io.StringReader. "bytes"))
+     (let [body (io/input-stream (.getBytes "bytes" "utf-8"))
            key (atom nil)
            resp (post-paste {:uri "/foo.txt"
                              :store _store
-                             :body (body)})]
+                             :body body})]
        (reset! key (get-in resp [:headers "x-key"]))
        (reset! store _store)
        (t)))))

@@ -1,4 +1,5 @@
 (ns elmer.test.core
+  (:require [clojure.java.io :as io])
   (:use [elmer.store.fs :only [with-tmp-fs-store]])
   (:use [elmer.core] :reload)
   (:use [clojure.test]
@@ -6,7 +7,7 @@
 
 (deftest t-post
   (with-tmp-fs-store [store (test-dir)]
-    (let [body (fn [] (java.io.StringReader. "bytes"))
+    (let [body (fn [] (io/input-stream (.getBytes "bytes" "utf-8")))
           key (atom nil)
           resp (post-paste {:uri "/foo.txt"
                             :store store
