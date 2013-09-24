@@ -15,4 +15,7 @@
                  [org.codehaus.jackson/jackson-core-asl "1.9.12"]
 ]
   :plugins [[lein-ring "0.8.3"]]
-  :ring {:handler elmer.serve/handler})
+  :ring {:handler elmer.serve/handler}
+  :test-selectors {:default (complement :integration)
+                   :integration :integration
+                   :all (constantly true)})
