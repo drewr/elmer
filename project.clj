@@ -1,4 +1,4 @@
-(defproject elmer "1.1.0"
+(defproject elmer "1.2.0"
   :description "Awesome!!!11"
   :exclusions #{org.codehaus.jackson/jackson-core-asl}
   :dependencies [
