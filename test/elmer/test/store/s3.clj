@@ -17,7 +17,9 @@
   (let [f (make-paste-name)]
     (testing "should put a paste"
       (with-s3-store [store (creds)]
-        (is (store/put store f "sekrat" "bytes"))
+        (is (store/put store f "sekrat"
+                       (io/input-stream
+                        (.getBytes "bytes" "UTF-8"))))
         (is (= "bytes" (store/get store f)))))
     (testing "should put a paste from an InputStream"
       (with-s3-store [store (creds)]
@@ -30,6 +32,10 @@
   (let [f (make-paste-name)]
     (testing "should update a paste, or not if key invalid"
       (with-s3-store [store (creds)]
-        (is (store/put store f "sekrat" "bytes"))
-        (is (store/put store f "sekrat" "bytes"))
+        (is (store/put store f "sekrat"
+                       (io/input-stream
+                        (.getBytes "bytes" "UTF-8"))))
+        (is (store/put store f "sekrat"
+                       (io/input-stream
+                        (.getBytes "bytes" "UTF-8"))))
         (is (not (store/put store f "bad" "bytes")))))))
