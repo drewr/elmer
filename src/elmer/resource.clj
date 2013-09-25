@@ -1,19 +1,20 @@
-(ns elmer.resource)
-
-(declare foo)
+(ns elmer.resource
+  (refer-clojure :exclude [load]))
 
 (defn get-resource [path]
   (.getResource
-   (.getClassLoader (class foo)) path))
+   (ClassLoader/getSystemClassLoader) path))
 
 (defn get-resources [path]
   (enumeration-seq
    (.getResources
-    (.getClassLoader (class foo)) path)))
+    (ClassLoader/getSystemClassLoader) path)))
 
 (defn get-resource-file [path]
   (.getFile (get-resource path)))
 
-(defn load-resource [path]
-  (read-string (slurp path)))
+(defn load [path]
+  (-> path get-resource slurp))
 
+(defn load-clj [path]
+  (-> path load read-string))

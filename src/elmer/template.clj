@@ -10,8 +10,7 @@
     st))
 
 (defn load* [path ctx]
-  (make-template
-   (slurp (resource/get-resource-file path)) ctx))
+  (make-template (resource/load path) ctx))
 
 (defn render [path ctx]
   (.render (load* path ctx)))

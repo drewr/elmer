@@ -5,8 +5,7 @@
 
 (defn config-map [path]
   (reduce merge {}
-          (map (comp r/load-resource
-                     #(.getFile %))
+          (map (comp r/load #(.getFile %))
                (reverse
                 (r/get-resources path)))))
 
