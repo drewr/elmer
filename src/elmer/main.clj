@@ -3,7 +3,8 @@
   (:require [elmer.core :as elmer]
             [ring.adapter.jetty :as jetty]))
 
-(defn -main [conf]
+(defn -main [& args]
+  (prn args)
   (jetty/run-jetty
-   (elmer/make-handler (-> conf slurp read-string))
+   (elmer/make-handler (-> (first args) slurp read-string))
    {:port 8085}))
