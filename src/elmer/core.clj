@@ -6,7 +6,7 @@
             [elmer.middleware :refer [wrap-paste-store]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
-            [compojure.core :refer [routes GET POST ANY]]
+            [compojure.core :as http]
             )
   (:require [clojure.tools.logging :as log])
   (:use [clojure.string :only [replace-first]]
@@ -61,7 +61,8 @@
          :body (format "FAIL %s\n" paste)}))))
 
 (defn info-paste [config request]
-  (render-template "paste.sh" {:url (config :public-url)}))
+  (render-template (config :template-root)
+                   "paste.sh" {:url (config :public-url)}))
 
 (defn home [request]
   (html/html
@@ -74,26 +75,24 @@
    [:h1 (format "Page not found: %s" (:uri request))]))
 
 (defn make-routes [config]
-  (routes
-   (GET "/:paste.:ext" {{paste :paste
-                         ext :ext} :params
-                         store :store}
-        (serve-paste store (format "%s.%s" paste ext)))
-   (GET "/sh" request
-        (info-paste config request))
-   (GET "/" request
-        (home request))
+  (http/routes
+   (http/GET "/:paste.:ext"
+             {{paste :paste ext :ext} :params store :store}
+             (serve-paste store (format "%s.%s" paste ext)))
+   (http/GET "/sh" request
+             (info-paste config request))
+   (http/GET "/" request
+             (home request))
+   (http/POST "/:paste.:ext" request
+              (post-paste config request))
+   (http/POST "/" request
+              (post-paste config request))
 
-   (POST "/:paste.:ext" request
-         (post-paste config request))
-   (POST "/" request
-         (post-paste config request))
-
-   (ANY "*" request
-        {:status 404, :body (not-found request)})))
+   (http/ANY "*" request
+             {:status 404, :body (not-found request)})))
 
 (defn make-handler [config]
-  (-> (make-routes routes)
+  (-> (make-routes config)
       (wrap-paste-store config)
       (wrap-resource "public")
       wrap-content-type))

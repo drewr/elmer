@@ -1,28 +1,14 @@
-(ns elmer.config)
+(ns elmer.config
+  (:require [elmer.resource :as r]))
 
 (declare config config-resource)
 
-(defn get-resource [path]
-  (.getResource
-   (.getClassLoader (class config)) path))
-
-(defn get-resources [path]
-  (enumeration-seq
-   (.getResources
-    (.getClassLoader (class config)) path)))
-
-(defn get-resource-file [path]
-  (.getFile (get-resource path)))
-
-(defn load-resource [path]
-  (read-string (slurp path)))
-
 (defn config-map [path]
   (reduce merge {}
-          (map (comp load-resource
+          (map (comp r/load-resource
                      #(.getFile %))
                (reverse
-                (get-resources path)))))
+                (r/get-resources path)))))
 
 (defn config-resource [& keys]
   (let [path "etc/config.clj"]

@@ -1,10 +1,9 @@
 (ns elmer.main
   (:gen-class)
   (:require [elmer.core :as elmer]
-            [elmer.config :refer [config-map]]
             [ring.adapter.jetty :as jetty]))
 
-(defn -main [config]
+(defn -main [conf]
   (jetty/run-jetty
-   (elmer/make-handler (config-map config))
+   (elmer/make-handler (-> conf slurp read-string))
    {:port 8085}))

@@ -1,6 +1,6 @@
 (ns elmer.template
-  (:use [elmer.config]
-        [elmer.io :only [join-path]])
+  (:use [elmer.io :only [join-path]]
+        [elmer.resource :as resource])
   (:import (org.stringtemplate.v4 ST)))
 
 (defn make-template [s vs]
@@ -11,10 +11,10 @@
 
 (defn load* [path ctx]
   (make-template
-   (slurp (get-resource-file path)) ctx))
+   (slurp (resource/get-resource-file path)) ctx))
 
 (defn render [path ctx]
   (.render (load* path ctx)))
 
-(defn render-template [tmpl ctx]
-  (render (join-path (config :template-root) tmpl) ctx))
+(defn render-template [root tmpl ctx]
+  (render (join-path root tmpl) ctx))
