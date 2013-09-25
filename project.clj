@@ -15,7 +15,9 @@
                  [org.codehaus.jackson/jackson-core-asl "1.9.12"]]
   :profiles {:dev {:dependencies [[ring/ring-devel "1.1.8"]]}}
   :plugins [[lein-ring "0.8.3"]]
-  :ring {:handler elmer.serve/embedded
+  :main elmer.main
+  :aot [elmer.main]
+  :ring {:handler elmer.core/embedded
          :servlet-class-name elmer.serve/servlet}
   :test-selectors {:default (complement :integration)
                    :integration :integration

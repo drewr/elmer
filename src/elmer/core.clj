@@ -6,11 +6,10 @@
             [elmer.middleware :refer [wrap-paste-store]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
+            [compojure.core :refer [routes GET POST ANY]]
             )
   (:require [clojure.tools.logging :as log])
   (:use [clojure.string :only [replace-first]]
-        [compojure.core :only [defroutes GET POST ANY]]
-        [elmer.config]
         [elmer.template :only [render-template]]))
 
 (defn make-key []
@@ -42,7 +41,7 @@
      (finally
        (.delete ~sym))))
 
-(defn post-paste [{:keys [uri body store] :as req}]
+(defn post-paste [config {:keys [uri body store] :as req}]
   (let [paste (save-as req)
         key (or (-> req :headers (get "x-key"))
                 (make-key))
@@ -61,7 +60,7 @@
         {:status 500
          :body (format "FAIL %s\n" paste)}))))
 
-(defn info-paste [request]
+(defn info-paste [config request]
   (render-template "paste.sh" {:url (config :public-url)}))
 
 (defn home [request]
@@ -74,26 +73,27 @@
   (html/html
    [:h1 (format "Page not found: %s" (:uri request))]))
 
-(defroutes app
-  (GET "/:paste.:ext" {{paste :paste
-                        ext :ext} :params
-                        store :store}
-       (serve-paste store (format "%s.%s" paste ext)))
-  (GET "/sh" request
-       (info-paste request))
-  (GET "/" request
-       (home request))
+(defn make-routes [config]
+  (routes
+   (GET "/:paste.:ext" {{paste :paste
+                         ext :ext} :params
+                         store :store}
+        (serve-paste store (format "%s.%s" paste ext)))
+   (GET "/sh" request
+        (info-paste config request))
+   (GET "/" request
+        (home request))
 
-  (POST "/:paste.:ext" request
-        (post-paste request))
-  (POST "/" request
-        (post-paste request))
+   (POST "/:paste.:ext" request
+         (post-paste config request))
+   (POST "/" request
+         (post-paste config request))
 
-  (ANY "*" request
-       {:status 404, :body (not-found request)}))
+   (ANY "*" request
+        {:status 404, :body (not-found request)})))
 
-(def handler (-> app
-                 wrap-paste-store
-                 (wrap-resource "public")
-                 wrap-content-type
-                 #_wrap-context-path))
+(defn make-handler [config]
+  (-> (make-routes routes)
+      (wrap-paste-store config)
+      (wrap-resource "public")
+      wrap-content-type))
