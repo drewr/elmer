@@ -1,5 +1,5 @@
 (ns elmer.resource
-  (refer-clojure :exclude [load]))
+  (:refer-clojure :exclude [load]))
 
 (defn get-resource [path]
   (.getResource
