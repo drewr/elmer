@@ -41,11 +41,11 @@
      (finally
        (.delete ~sym))))
 
-(defn post-paste [config {:keys [uri body store] :as req}]
+(defn post-paste [{:keys [uri body store elmer] :as req}]
   (let [paste (save-as req)
         key (or (-> req :headers (get "x-key"))
                 (make-key))
-        paste-url (format "%s/%s" (config :public-url) paste)]
+        paste-url (format "%s/%s" (-> elmer :public-url) paste)]
     (try
       (if-let [size (store/put store paste key body)]
         (do
@@ -60,9 +60,9 @@
         {:status 500
          :body (format "FAIL %s\n" paste)}))))
 
-(defn info-paste [config request]
-  (render-template (config :template-root)
-                   "paste.sh" {:url (config :public-url)}))
+(defn info-paste [request]
+  (render-template (-> request :elmer :template-root)
+                   "paste.sh" {:url (-> request :elmer :public-url)}))
 
 (defn home [request]
   (html/html
@@ -74,25 +74,30 @@
   (html/html
    [:h1 (format "Page not found: %s" (:uri request))]))
 
-(defn make-routes [config]
+(def routes
   (http/routes
    (http/GET "/:paste.:ext"
              {{paste :paste ext :ext} :params store :store}
              (serve-paste store (format "%s.%s" paste ext)))
    (http/GET "/sh" request
-             (info-paste config request))
+             (info-paste request))
    (http/GET "/" request
              (home request))
    (http/POST "/:paste.:ext" request
-              (post-paste config request))
+              (post-paste request))
    (http/POST "/" request
-              (post-paste config request))
+              (post-paste request))
 
    (http/ANY "*" request
              {:status 404, :body (not-found request)})))
 
+(defn wrap-config [app conf]
+  (fn [req]
+    (app (assoc req :elmer conf))))
+
 (defn make-handler [config]
-  (-> (make-routes config)
-      (wrap-paste-store config)
+  (-> routes
+      wrap-paste-store
       (wrap-resource "public")
-      wrap-content-type))
+      wrap-content-type
+      (wrap-config config)))

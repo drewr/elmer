@@ -1,9 +1,10 @@
 (ns elmer.test.core
-  (:require [clojure.java.io :as io])
-  (:use [elmer.store.fs :only [with-tmp-fs-store]])
-  (:use [elmer.core] :reload)
-  (:use [clojure.test]
-        [elmer.util :only [test-dir]]))
+  (:require [clojure.test :refer :all]
+            [clojure.java.io :as io]
+            [elmer.store.fs :refer [with-tmp-fs-store]]
+            [elmer.util :refer [test-dir]])
+  (:require [elmer.core :refer :all]
+            :reload))
 
 (deftest t-post
   (with-tmp-fs-store [store (test-dir)]

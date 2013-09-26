@@ -8,7 +8,7 @@
 (defn creds []
   (-> (str (System/getProperty "user.home")
            "/.elmer.clj")
-      slurp read-string))
+      slurp read-string :store))
 
 (defn make-paste-name []
   (format "test/elmer-%s.txt" (subs (str (java.util.UUID/randomUUID)) 0 6)))
