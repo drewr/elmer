@@ -1,8 +1,7 @@
 (defproject elmer "1.2-SNAPSHOT"
   :description "Awesome!!!11"
   :exclusions #{org.codehaus.jackson/jackson-core-asl}
-  :dependencies [
-                 [clj-aws-s3 "0.3.2"]
+  :dependencies [[clj-aws-s3 "0.3.2"]
                  [commons-io "2.4"]
                  [compojure "1.1.5"]
                  [enlive "1.1.1" :exclusions [org.clojure/clojure]]
