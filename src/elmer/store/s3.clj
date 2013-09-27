@@ -1,9 +1,8 @@
 (ns elmer.store.s3
-  (:require [clojure.tools.logging :as log]
-            [aws.sdk.s3 :as s3]
-            [elmer.util :refer [with-tmp-file]])
-  (:use [elmer.store :only [PasteStore]])
-  (:import (org.apache.commons.io.input CountingInputStream)))
+  (:require [aws.sdk.s3 :as s3]
+            [clojure.tools.logging :as log]
+            [elmer.store :refer [PasteStore]]
+            [elmer.util :refer [with-tmp-file]]))
 
 (defmacro with-s3-store [[store conf] & body]
   `(let [~store (s3-store ~conf)]

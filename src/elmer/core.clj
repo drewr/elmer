@@ -1,16 +1,15 @@
 (ns elmer.core
-  (:require [elmer.store :as store]
-            [compojure.route :as route]
-            [hiccup.core :as html]
-            [elmer.util :refer [unique]]
-            [elmer.middleware :refer [wrap-paste-store]]
-            [ring.middleware.resource :refer [wrap-resource]]
-            [ring.middleware.content-type :refer [wrap-content-type]]
+  (:require [clojure.string :refer [replace-first]]
+            [clojure.tools.logging :as log]
             [compojure.core :as http]
-            )
-  (:require [clojure.tools.logging :as log])
-  (:use [clojure.string :only [replace-first]]
-        [elmer.template :only [render-template]]))
+            [compojure.route :as route]
+            [elmer.middleware :refer [wrap-paste-store]]
+            [elmer.store :as store]
+            [elmer.template :refer [render-template]]
+            [elmer.util :refer [unique]]
+            [hiccup.core :as html]
+            [ring.middleware.content-type :refer [wrap-content-type]]
+            [ring.middleware.resource :refer [wrap-resource]]))
 
 (defn make-key []
   (let [r (java.security.SecureRandom.)

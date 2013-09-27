@@ -3,6 +3,9 @@
   (:import (java.io File)
            (java.text SimpleDateFormat)))
 
+(defmacro join-path [& paths]
+  `(str (-> ~@(for [p paths] `(java.io.File. ~p)))))
+
 (defn test-dir []
   (str "tmp/pastes-"
        (.substring

@@ -1,6 +1,6 @@
 (ns elmer.template
-  (:require [elmer.resource :as resource])
-  (:use [elmer.io :only [join-path]])
+  (:require [elmer.resource :as resource]
+            [elmer.util :refer [join-path]])
   (:import (org.stringtemplate.v4 ST)))
 
 (defn make-template [s vs]
