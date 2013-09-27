@@ -20,4 +20,6 @@
   ;;        :servlet-class-name elmer.serve/servlet}
   :test-selectors {:default (complement :integration)
                    :integration :integration
-                   :all (constantly true)})
+                   :all (constantly true)}
+  :jar-name "elmer-%s-nodeps.jar"
+  :uberjar-name "elmer-%s.jar")
