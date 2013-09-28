@@ -15,6 +15,5 @@
 ;;       wrap-context-path))
 
 (defn -main [& args]
-  (jetty/run-jetty
-   (make-handler (-> (first args) slurp read-string))
-   {:port 8085}))
+  (let [conf (-> (first args) slurp read-string)]
+    (jetty/run-jetty (make-handler conf) {:port (:port conf 8085)})))
