@@ -14,6 +14,9 @@
 ;;   (-> embedded
 ;;       wrap-context-path))
 
+(defn main [conf join?]
+  (jetty/run-jetty (make-handler conf) {:port (:port conf 8085)
+                                        :join? join?}))
+
 (defn -main [& args]
-  (let [conf (-> (first args) slurp read-string)]
-    (jetty/run-jetty (make-handler conf) {:port (:port conf 8085)})))
+  (main (-> (first args) slurp read-string) true))
