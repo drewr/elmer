@@ -1,4 +1,5 @@
-(defproject elmer "1.2-SNAPSHOT"
+(defproject elmer
+  (-> "version.txt" slurp .trim)
   :description "Awesome!!!11"
   :exclusions #{org.codehaus.jackson/jackson-core-asl}
   :dependencies [[clj-aws-s3 "0.3.2"]

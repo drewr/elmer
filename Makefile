@@ -1,21 +1,14 @@
-PROJECT = elmer
-WAR = paste
-DEST = deploy@draines
-JETTY_PATH = /apps/jetty
-LOCAL_JETTY_PATH = ~/src/jetty
+LEIN ?= lein
+NAME = elmer
+VERSION = $(shell git ver)
+JAR = $(NAME)-$(VERSION).jar
 
-build:
-	lein clean && lein uberjar
+package: target/$(JAR)
 
-local-deploy:
-	lein clean && lein deps && lein compile && lein uberwar \
-		&& mv $(PROJECT).war jetty/webapps/$(WAR).war \
-		&& touch jetty/contexts/$(WAR).xml \
-		&& ( cd jetty; tar cf - . ) \
-		| ( cd $(LOCAL_JETTY_PATH); tar xvf - )
+clean:
+	$(LEIN) clean
 
-deploy: build
-	mv $(PROJECT).war jetty/webapps/$(WAR).war \
-		&& touch jetty/contexts/$(WAR).xml \
-		&& ( cd jetty; tar cf - . ) \
-		| ( ssh $(DEST) cd $(JETTY_PATH)\; tar xvf - )
+target/$(JAR):
+	echo $(VERSION) >version.txt
+	LEIN_SNAPSHOTS_IN_RELEASE=yes $(LEIN) uberjar
+

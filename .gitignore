@@ -8,3 +8,4 @@ classes
 /.lein-deps-sum
 /target
 /.nrepl-port
+/version.txt
