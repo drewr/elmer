@@ -10,9 +10,9 @@
                  [org.antlr/stringtemplate "4.0.2"]
                  [org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.logging "0.2.3"]
-                 [ring/ring "1.1.8"]
+                 [ring/ring "1.2.0"]
                  [org.codehaus.jackson/jackson-core-asl "1.9.12"]]
-  :profiles {:dev {:dependencies [[ring/ring-devel "1.1.8"]]}}
+  :profiles {:dev {:dependencies [[ring/ring-devel "1.2.0"]]}}
   :plugins [[lein-ring "0.8.7"]]
   :main elmer.serve
   :aot [elmer.serve]
