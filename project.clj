@@ -3,7 +3,7 @@
   :exclusions #{org.codehaus.jackson/jackson-core-asl}
   :dependencies [[clj-aws-s3 "0.3.2"]
                  [commons-io "2.4"]
-                 [compojure "1.1.5"]
+                 [compojure "1.1.5" :exclusions [ring/ring-core]]
                  [enlive "1.1.1" :exclusions [org.clojure/clojure]]
                  [hiccup "1.0.4"]
                  [log4j/log4j "1.2.16"]
