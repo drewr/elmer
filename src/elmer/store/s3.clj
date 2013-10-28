@@ -1,7 +1,7 @@
 (ns elmer.store.s3
   (:require [aws.sdk.s3 :as s3]
             [clojure.tools.logging :as log]
-            [elmer.store :refer [PasteStore]]
+            [elmer.store.protocol :refer [PasteStore]]
             [elmer.util :refer [with-tmp-file]]))
 
 (defmacro with-s3-store [[store conf] & body]

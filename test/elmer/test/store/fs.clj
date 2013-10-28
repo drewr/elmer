@@ -1,5 +1,5 @@
 (ns elmer.test.store.fs
-  (:require [elmer.store :as store])
+  (:require [elmer.store.protocol :as store])
   (:use [elmer.store.fs] :reload)
   (:use [clojure.test]
         [elmer.util :only [test-dir]]))

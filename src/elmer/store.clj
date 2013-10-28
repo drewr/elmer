@@ -1,10 +1,5 @@
 (ns elmer.store
-  (:refer-clojure :exclude [get]))
+  (:require [elmer.store fs s3]))
 
-(defprotocol PasteStore
-  (get [store name]
-    "Get paste.")
-  (put [store name key bytes]
-    "Persist bytes to store by name, secured with key.")
-  (authorized? [store name key]
-    "Does this key match stored key for name?"))
+(defn find-paste-store [cfg]
+  ((-> (:factory cfg) .sym find-var) cfg))

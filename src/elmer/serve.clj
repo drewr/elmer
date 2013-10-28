@@ -1,6 +1,7 @@
 (ns elmer.serve
   (:gen-class)
   (:require [elmer.core :refer [make-handler]]
+            [elmer.store :refer [find-paste-store]]
             ;; [elmer.context :refer [wrap-context-path]]
             ;; [elmer.config :refer [config-map]]
             [ring.adapter.jetty :as jetty]))
@@ -15,8 +16,17 @@
 ;;       wrap-context-path))
 
 (defn main [conf join?]
-  (jetty/run-jetty (make-handler conf) {:port (:port conf 8085)
-                                        :join? join?}))
+  (if-let [store (find-paste-store (:store conf))]
+    (jetty/run-jetty
+     (make-handler
+      (assoc conf :store store))
+     {:port (:port conf 8085)
+      :join? join?})
+    (throw
+     (Exception.
+      (with-out-str
+        (print "no store found for conf")
+        (prn conf))))))
 
 (defn -main [& args]
   (main (-> (first args) slurp read-string) true))

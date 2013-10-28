@@ -1,10 +1,7 @@
 (ns elmer.middleware
-  (:require [elmer.store fs s3]
+  (:require [elmer.store :refer [find-paste-store]]
             [elmer.config :refer [config]]))
 
-(defn wrap-paste-store [handler]
+(defn wrap-paste-store [handler store]
   (fn [req]
-    (if-let [storecfg (-> req :elmer :store)]
-      (let [store ((-> (:factory storecfg) .sym find-var) storecfg)]
-        (handler (assoc req :store store)))
-      (throw (Exception. "no :store found in config")))))
+    (handler (assoc req :store store))))

@@ -4,7 +4,7 @@
             [compojure.core :as http]
             [compojure.route :as route]
             [elmer.middleware :refer [wrap-paste-store]]
-            [elmer.store :as store]
+            [elmer.store.protocol :as store]
             [elmer.template :refer [render-template]]
             [elmer.util :refer [unique]]
             [hiccup.core :as html]
@@ -18,13 +18,18 @@
     (.encode (sun.misc.BASE64Encoder.) bs)))
 
 (defn serve-paste [store paste]
-  (let [bytes (store/get store paste)]
-    (if bytes
-      {:status 200
-       :headers {"Content-Type" "text/plain"}
-       :body bytes}
-      {:status 404
-       :body (format "%s not found" paste)})))
+  (try
+    (let [bytes (store/get store paste)]
+      (if bytes
+        {:status 200
+         :headers {"Content-Type" "text/plain"}
+         :body bytes}
+        {:status 404
+         :body (format "%s not found" paste)}))
+    (catch Exception e
+      (log/error (type e) (.getMessage e))
+      {:status 500
+       :body (format "FAIL %s\n" paste)})))
 
 (defn save-as [request]
   (let [uri (replace-first (:uri request) "/" "")
@@ -96,7 +101,7 @@
 
 (defn make-handler [config]
   (-> routes
-      wrap-paste-store
+      (wrap-paste-store (:store config))
       (wrap-resource "public")
       wrap-content-type
       (wrap-config config)))

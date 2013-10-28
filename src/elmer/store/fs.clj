@@ -1,7 +1,7 @@
 (ns elmer.store.fs
   (:require [clojure.java.io :refer [file]]
             [clojure.tools.logging :as log]
-            [elmer.store :refer [PasteStore]]
+            [elmer.store.protocol :refer [PasteStore]]
             [elmer.util :refer [make-dir delete-dir]]))
 
 (defmacro with-tmp-fs-store [[store dir keep] & body]

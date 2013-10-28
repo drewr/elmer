@@ -1,5 +1,5 @@
 (ns elmer.test.store.s3
-  (:require [elmer.store :as store]
+  (:require [elmer.store.protocol :as store]
             [elmer.util :refer [with-tmp-file]])
   (:use [elmer.store.s3] :reload)
   (:use [clojure.test]
